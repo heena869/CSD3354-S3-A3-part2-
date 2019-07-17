@@ -1,248 +1,149 @@
-﻿
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace assignment_3b
-{
-           class Program
-        {
-            static void Main(string[] args)
-            {
-                var tp = new TextProcessing();
-                tp.Run();
-
-
-            }
-        }
-        class TextProcessing
-
-        {
-            Queue<string> names = new Queue<string>();
-            public void Run()
-            {
-
-                // Open the names file and access the data
-                using (StreamReader file = new StreamReader("U:/Users/735225/ass_3/assignment_3/assignment_3/TextFile1.txt"))
-                {
-                    int counter = 0;
-                    string ln;
-
-                    while ((ln = file.ReadLine()) != null)
-                    {
-                        names.Enqueue(ln);
-                        Console.WriteLine(ln
-    );
-                        counter++;
-                    }
-                    file.Close();
-                    Console.WriteLine($"File has {counter} lines.");
-                    PlayingWithStacks.Run(names);
-                }
-            }
-        }
-        class PlayingWithStacks
-        {
-            public static void Run(Queue<string> tangerine)
-            {
-                Stack<string> names = new Stack<string>();
-
-                foreach (var item in tangerine)
-                {
-                    names.Push(tangerine.Dequeue());
-                }
-
-            }
-
-        }
-        class Workbench
-        {
-
-        }
-
-        class Red
-        {
-            public static string FavoriteFood = "carroits";
-        }
-
-        class Blue
-        {
-            public void SayFavoriteFood(string FavFood)
-            {
-                Console.WriteLine(Red.FavoriteFood);
-            }
-        }
-
-
-    public class LinkedList
-    {
-        private Node Head, Orange, Tangerine, Tail;
-        public void CreateLinkedList()
-
-        {
-            Head = new Node();
-            Head.nextLink = Orange;
-            Console.WriteLine("Yeah!!!");
-        }
-
-
-        class Node
-        {
-            public string nodename;
-            public Node nextLink;
-            public Node prevLink;
-        }
-    }
-
-     
+using System.Collections.Generic;
 
 class JournalEntry
+{
+    public JournalEntry(string note, int dist)
     {
-        public JournalEntry(string note, int dist)
+        villageName = note; distanceTraveled = dist;
+        HowFarToGetBack = distanceTraveled;
+    }
+    public int HowFarToGetBack = 0;
+    private string villageName;
+    private int distanceTraveled;
+    public int getDistanceWalked() { return distanceTraveled; }
+    public string getVillageName() { return villageName; }
+}
+
+class Hugi
+{
+    private static JournalEntry je;
+    public static bool FoundAstrilde = false;
+
+    public static List<JournalEntry> HugiJournal = new List<JournalEntry>();
+
+    public static int CalculateDistanceWalked()
+    {
+        int DistanceWalked = 0;
+        // walk over the List and add the distances
+        foreach (var je in HugiJournal)
         {
-            villageName = note; distanceTraveled = dist;
-            HowFarToGetBack = distanceTraveled;
+            Console.WriteLine(" {0}  --   {1} *** --- {2} ", je.getDistanceWalked(), je.getVillageName(), je.HowFarToGetBack);
+            DistanceWalked += je.getDistanceWalked() + je.HowFarToGetBack;
         }
-        public int HowFarToGetBack = 0;
-        private string villageName;
-        private int distanceTraveled;
-        public int getDistanceWalked() { return distanceTraveled; }
-        public string getVillageName() { return villageName; }
+        return DistanceWalked;
+    }
+}
+
+class CountrySide
+{
+    static void Main()
+    {
+        CountrySide a = new CountrySide();
+        a.Run();
     }
 
-    class Hugi
+    // Create the LinkedList to reflect the Map in the PowerPoint Instructions
+    Village Maeland;
+    Village Helmholtz;
+    Village Alst;
+    Village Wessig;
+    Village Badden;
+    Village Uster;
+    Village Schvenig;
+
+    public void TraverseVillages(Village CurrentVillage)
     {
-        private static JournalEntry je;
-        public static bool FoundAstrilde = false;
-
-        public static List<JournalEntry> HugiJournal = new List<JournalEntry>();
-
-        public static int CalculateDistanceWalked()
+        if (Hugi.FoundAstrilde) return;
+        Hugi.HugiJournal.Add(new JournalEntry(CurrentVillage.VillageName, CurrentVillage.distanceFromPreviousVillage));
+        try
         {
-            int DistanceWalked = 0;
-            // walk over the List and add the distances
-            foreach (var je in HugiJournal)
+            Console.WriteLine("I am in {0}", CurrentVillage.VillageName);
+
+            if (CurrentVillage.isAstrildgeHere)
             {
-                Console.WriteLine(" {0}  --   {1} *** --- {2} ", je.getDistanceWalked(), je.getVillageName(), je.HowFarToGetBack);
-                DistanceWalked += je.getDistanceWalked() + je.HowFarToGetBack;
+                Console.WriteLine("I found Dear Astrildge in {0}", CurrentVillage.VillageName);
+                Console.WriteLine("**** FEELING HAPPY!!! ******");
+                Console.WriteLine("Astrilde, I walked {0} vika to find you. Will you marry me?", Hugi.CalculateDistanceWalked());
+                Hugi.FoundAstrilde = true;
             }
-            return DistanceWalked;
+            TraverseVillages(CurrentVillage.east);
+            TraverseVillages(CurrentVillage.west);
+
         }
+        catch (NullReferenceException) { }
     }
 
-    class CountrySide
+    public void Run()
     {
-        static void Main()
-        {
-            CountrySide a = new CountrySide();
-            a.Run();
-        }
+        Alst = new Village("Alst", false);
+        Schvenig = new Village("Schvenig", false);
+        Wessig = new Village("Wessig", false);
+        Maeland = new Village("Maeland", true);
+        Helmholtz = new Village("Helmholtz", false);
+        Uster = new Village("Uster", true);
+        Badden = new Village("Badden", false);
 
-        // Create the LinkedList to reflect the Map in the PowerPoint Instructions
-        Village Maeland;
-        Village Helmholtz;
-        Village Alst;
-        Village Wessig;
-        Village Badden;
-        Village Uster;
-        Village Schvenig;
+        Alst.VillageSetup(0, Schvenig, Wessig);
+        Schvenig.VillageSetup(14, Maeland, Helmholtz);
+        Maeland.VillageSetup(9, null, Helmholtz);
+        Helmholtz.VillageSetup(28, null, null);
+        Wessig.VillageSetup(19, Uster, Badden);
+        Uster.VillageSetup(28, null, null);
+        Badden.VillageSetup(11, null, null);
 
-        public void TraverseVillages(Village CurrentVillage)
+
+        this.TraverseVillages(Alst);
+        this.Announcement();
+        Console.ReadLine();
+    }
+
+    public void Announcement()
+    {
+        try
         {
-            if (Hugi.FoundAstrilde) return;
-            Hugi.HugiJournal.Add(new JournalEntry(CurrentVillage.VillageName, CurrentVillage.distanceFromPreviousVillage));
-            try
+
+            using (StreamReader sr = new StreamReader("U:/Users/735225/ass_3/assignment_3b/assignment_3b/annoucement.txt "))
             {
-                Console.WriteLine("I am in {0}", CurrentVillage.VillageName);
+                string line;
 
-                if (CurrentVillage.isAstrildgeHere)
+                // Read and display lines from the file until 
+                // the end of the file is reached. 
+                while ((line = sr.ReadLine()) != null)
                 {
-                    Console.WriteLine("I found Dear Astrildge in {0}", CurrentVillage.VillageName);
-                    Console.WriteLine("**** FEELING HAPPY!!! ******");
-                    Console.WriteLine("Astrilde, I walked {0} vika to find you. Will you marry me?", Hugi.CalculateDistanceWalked());
-                    Hugi.FoundAstrilde = true;
-                }
-
-            }
-            catch (NullReferenceException) { }
-        }
-
-        public void Run()
-        {
-            Alst = new Village("Alst", false);
-            Schvenig = new Village("Schvenig", false);
-            Wessig = new Village("Wessig", false);
-            Maeland = new Village("Maeland", true);
-            Helmholtz = new Village("Helmholtz", false);
-            Uster = new Village("Uster", true);
-            Badden = new Village("Badden", false);
-
-            Alst.VillageSetup(0, Schvenig, Wessig);
-            Schvenig.VillageSetup(14, Maeland, Helmholtz);
-            Maeland.VillageSetup(9, null, Helmholtz);
-            Helmholtz.VillageSetup(28, null, null);
-            Wessig.VillageSetup(19, Uster, Badden);
-            Uster.VillageSetup(28, null, null);
-            Badden.VillageSetup(11, null, null);
-
-            this.TraverseVillages(Alst);
-            this.Announcement();
-            Console.ReadLine();
-        }
-
-        public void Announcement()
-        {
-            try
-            {
-                // Create an instance of StreamReader to read from a file.
-                // The using statement also closes the StreamReader.
-                using (StreamReader sr = new StreamReader("c:/area51/annoucement.txt"))
-                {
-                    string line;
-
-                    // Read and display lines from the file until 
-                    // the end of the file is reached. 
-                    while ((line = sr.ReadLine()) != null)
-                    {
-                        Console.WriteLine(line);
-                    }
+                    Console.WriteLine(line);
                 }
             }
-            catch (Exception e)
-            {
-                // Let the user know what went wrong.
-                Console.WriteLine("The file could not be read:");
-                Console.WriteLine(e.Message);
-            }
+        }
+        catch (Exception e)
+        {
+            // Let the user know what went wrong.
+            Console.WriteLine("The file could not be read:");
+            Console.WriteLine(e.Message);
         }
     }
+}
 
-    class Village
+class Village
+{
+    // http://www.vikinganswerlady.com/measurement.shtml
+
+    public Village(string _villageName, bool _isAHere)
     {
-        // http://www.vikinganswerlady.com/measurement.shtml
-
-        public Village(string _villageName, bool _isAHere)
-        {
-            isAstrildgeHere = _isAHere;
-            VillageName = _villageName;
-        }
-        public void VillageSetup(int _prevVillageDist, Village _westVillage, Village _eastVillage)
-        {
-            east = _eastVillage;
-            west = _westVillage;
-            distanceFromPreviousVillage = _prevVillageDist;
-        }
-
-        public Village west;
-        public Village east;
-        public string VillageName;
-        public int distanceFromPreviousVillage;
-        public bool isAstrildgeHere;
+        isAstrildgeHere = _isAHere;
+        VillageName = _villageName;
+    }
+    public void VillageSetup(int _prevVillageDist, Village _westVillage, Village _eastVillage)
+    {
+        east = _eastVillage;
+        west = _westVillage;
+        distanceFromPreviousVillage = _prevVillageDist;
     }
 
-
-
-
+    public Village west;
+    public Village east;
+    public string VillageName;
+    public int distanceFromPreviousVillage;
+    public bool isAstrildgeHere;
+}
